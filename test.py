@@ -4,14 +4,18 @@ import spectral
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
 os.chdir("D:\\UavHyperSpectrum\\Xiongan\\")
+
 retval = os.getcwd()
+
 print("目录修改成功 %s" % retval)
 
 image = envi.open('XiongAn.hdr.txt', 'XiongAn.img')
-#image = envi.open('farm_roi.hdr.txt', 'farm_roi.img')
+
 print(image.shape)
 
-spectral.imshow(image)
+cv2.imshow("windowName", image[:,:,[10,100,200]])
+
+cv2.waitKey(0)
 # #图像的显示
 # view = imshow(image, (29, 19, 9))
 #
