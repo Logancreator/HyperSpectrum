@@ -1,11 +1,12 @@
+from scipy.stats import gaussian_kde
+from skimage.measure import block_reduce
 import os
 import numpy as np
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
-from scipy.stats import gaussian_kde
-from skimage.measure import block_reduce
 import matplotlib
 import pylab
+
 pylab.show()
 matplotlib.use('Agg')
 
@@ -46,7 +47,6 @@ def get_color(number):
     list=[]
     list.extend(cnames.values())
     return list[:number]
-print(get_color(5))
 # 查看两个波段的相关性，间隔10个波段依然具有较高的相似度，可见高光谱数据冗余度很高
 def band_density(waveband_1, waveband_2,waveband_1_index,waveband_2_index):
     # 数组太大，先降采样，使用block_reduce函数进行卷积重采样
@@ -76,20 +76,42 @@ band_A = image[:,:,45]
 band_B = image[:,:,55]
 #band_density(band_A, band_B, 45, 55)
 
-def band_boxplot():
+def band_boxplot(band_list):
 
-    all_data = [np.random.normal(0, std, size=100) for std in range(1, 4)]
-    # 输入波段号，查看不同波段的箱线图
-    band_list = [0,1]
-    data = np.array(image[:,:,band_list])
-    print(data)
-    color = get_color(len(band_list))
-    fig = plt.figure(figsize=(10,4))
-    plt.style.use("ggplot")
-    colors = get_color(len(band_list))
-    plt.boxplot(image[:,:,1].reshape(1,len(band_list)), patch_artist=True, labels=band_list, widths=0.05)
-    plt.title('Box Plot', fontsize= 16)
-    plt.xlabel('Class', fontsize= 14)
-    plt.ylabel(f'Band-{len(band_list)}', fontsize= 14)
+    all_data = [np.array(image[:,:,x]).flatten() for x in band_list]
+
+    #print(all_data)
+
+    labels = ['band - '+str(i) for i in band_list]  ##柱子横坐标
+
+    fig= plt.figure(figsize=(8, 8))
+
+    # 长方形，默认没有notch
+    bplot1 = plt.boxplot(all_data,
+                         vert=True,  # vertical box alignment
+                         patch_artist=True,  # fill with color
+                         labels=labels)  # will be used to label x-ticks
+    plt.title('Rectangular box plot')
+    plt.xlabel(f'Band Number -{len(band_list)}', fontsize=10)
+    plt.ylabel(f'Hyperspectral value', fontsize=10)
+
+    ###遍历每个箱子对象
+    colors = get_color(len(band_list))  ##定义柱子颜色、和柱子数目一致
+
+    for patch, color in zip(bplot1['boxes'], colors):  ##zip快速取出两个长度相同的数组对应的索引值
+        patch.set_facecolor(color)  ##每个箱子设置对应的颜色
+
+    # # 输入波段号，查看不同波段的箱线图
+    # band_list = [0,1]
+    # data = np.array(image[:,:,band_list])
+    # print(data)
+    # color = get_color(len(band_list))
+    # fig = plt.figure(figsize=(10,4))
+    # plt.style.use("ggplot")
+    # colors = get_color(len(band_list))
+    # plt.boxplot(image[:,:,1].reshape(1,len(band_list)), patch_artist=True, labels=band_list, widths=0.05)
+    # plt.title('Box Plot', fontsize= 16)
+    # plt.xlabel('Class', fontsize= 14)
+    # plt.ylabel(f'Band-{len(band_list)}', fontsize= 14)
     plt.savefig("band_boxplot.png")
-band_boxplot()
+band_boxplot([i for i in range(50)])
