@@ -72,18 +72,14 @@ def band_density(waveband_1, waveband_2,waveband_1_index,waveband_2_index):
     plt.savefig("band_density.png", dpi = 600)
 
 
-band_A = image[:,:,45]
-band_B = image[:,:,55]
-#band_density(band_A, band_B, 45, 55)
 
 def band_boxplot(band_list):
-
+    # 根据波段号，转为array列表
     all_data = [np.array(image[:,:,x]).flatten() for x in band_list]
-
-    #print(all_data)
 
     labels = ['band - '+str(i) for i in band_list]  ##柱子横坐标
 
+    # 绘图
     fig= plt.figure(figsize=(8, 8))
 
     # 长方形，默认没有notch
@@ -95,23 +91,19 @@ def band_boxplot(band_list):
     plt.xlabel(f'Band Number -{len(band_list)}', fontsize=10)
     plt.ylabel(f'Hyperspectral value', fontsize=10)
 
-    ###遍历每个箱子对象
+
     colors = get_color(len(band_list))  ##定义柱子颜色、和柱子数目一致
 
+    ###遍历每个箱子对象
     for patch, color in zip(bplot1['boxes'], colors):  ##zip快速取出两个长度相同的数组对应的索引值
         patch.set_facecolor(color)  ##每个箱子设置对应的颜色
 
-    # # 输入波段号，查看不同波段的箱线图
-    # band_list = [0,1]
-    # data = np.array(image[:,:,band_list])
-    # print(data)
-    # color = get_color(len(band_list))
-    # fig = plt.figure(figsize=(10,4))
-    # plt.style.use("ggplot")
-    # colors = get_color(len(band_list))
-    # plt.boxplot(image[:,:,1].reshape(1,len(band_list)), patch_artist=True, labels=band_list, widths=0.05)
-    # plt.title('Box Plot', fontsize= 16)
-    # plt.xlabel('Class', fontsize= 14)
-    # plt.ylabel(f'Band-{len(band_list)}', fontsize= 14)
     plt.savefig("band_boxplot.png")
-band_boxplot([i for i in range(50)])
+
+if __name__ == '__main__':
+
+    band_A = image[:, :, 45]
+    band_B = image[:, :, 55]
+    band_density(band_A, band_B, 45, 55)
+
+    band_boxplot([i for i in range(50)])
