@@ -1,6 +1,6 @@
 import cv2
 import os
-from spectral import *
+import spectral
 import spectral.io.envi as envi
 import matplotlib.pyplot as plt
 os.chdir("D:\\UavHyperSpectrum\\Xiongan\\")
@@ -8,11 +8,10 @@ retval = os.getcwd()
 print("目录修改成功 %s" % retval)
 
 image = envi.open('XiongAn.hdr.txt', 'XiongAn.img')
+#image = envi.open('farm_roi.hdr.txt', 'farm_roi.img')
+print(image.shape)
 
-print(image)
-
-imshow(image, (27, 18, 9))
-cv2.waitKey(1000)
+spectral.imshow(image)
 # #图像的显示
 # view = imshow(image, (29, 19, 9))
 #
