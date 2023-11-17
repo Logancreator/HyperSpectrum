@@ -107,3 +107,5 @@ if __name__ == '__main__':
     band_density(band_A, band_B, 45, 55)
 
     band_boxplot([i for i in range(50)])
+
+    print("test")
