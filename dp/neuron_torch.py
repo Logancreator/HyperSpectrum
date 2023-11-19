@@ -8,10 +8,10 @@ class OurNeuralNetwork(nn.Module):
     def __init__(self):
         # 继承nn.Module
         super(OurNeuralNetwork, self).__init__()
-        # 全连接隐藏层 2x2的
-        self.hidden_layer = nn.Linear(2, 2)
-        # 输出层
-        self.output_layer = nn.Linear(2, 1)
+        # 全连接隐藏层 3x100的
+        self.hidden_layer = nn.Linear(3, 100)
+        # 输出层 100x1的
+        self.output_layer = nn.Linear(100, 1)
         # 激活函数
         self.sigmoid = nn.Sigmoid()
 
@@ -24,11 +24,12 @@ class OurNeuralNetwork(nn.Module):
 
 # 定义数据集 data
 data = torch.tensor([
-    [-2, -1],
-    [25, 6],
-    [17, 4],
-    [-15, -6]
+    [-2, -1, 100000],
+    [25, 6, 100000],
+    [17, 4, 100000],
+    [-15, -6, 100000]
 ], dtype=torch.float32)
+print(data.shape)
 all_y_trues = torch.tensor([
     [1],
     [0],
@@ -40,8 +41,8 @@ all_y_trues = torch.tensor([
 network = OurNeuralNetwork()
 # 设置loss
 loss_function = nn.MSELoss()
-# 随机梯度下降，学习率为0.01
-optimizer = optim.SGD(network.parameters(), lr=0.01)
+# 随机梯度下降，学习率为0.1
+optimizer = optim.SGD(network.parameters(), lr=0.1)
 # loss存为一个list
 loss_list = []
 
