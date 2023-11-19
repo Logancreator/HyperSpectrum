@@ -112,19 +112,19 @@ class OurNeuralNetwork:
 
 # 定义数据集 data
 data = np.array([
-  [-2, -1],  # Alice
-  [25, 6],   # Bob
-  [17, 4],   # Charlie
-  [-15, -6], # Diana
+  [-2, -1],
+  [25, 6],
+  [17, 4],
+  [-15, -6],
 ])
 all_y_trues = np.array([
-  1, # Alice
-  0, # Bob
-  0, # Charlie
-  1, # Diana
+  1,
+  0,
+  0,
+  1,
 ])
 
-# 训练我们的神经网络!
+# 训练神经网络!
 network = OurNeuralNetwork()
 loss_list = network.train(data, all_y_trues)
 
